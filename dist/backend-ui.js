@@ -11,7 +11,7 @@ export function installBackendUI({state,refresh,render,go,toast}){
       if(id==='auth'){
         if(d.mode==='forgot-password'){const result=await api('/auth/forgot',{method:'POST',body:{email:d.email}});toast(result.message);return;}
         if(d.mode==='reset-password'){const raw=new URLSearchParams(location.hash.split('?')[1]||'').get('token');await api('/auth/reset',{method:'POST',body:{token:raw||'',password:d.password}});next='login';notice='Đã đổi mật khẩu. Vui lòng đăng nhập.';}
-        else{await api(d.mode==='register'?'/auth/register':'/auth/login',{method:'POST',body:{email:d.email,password:d.password,name:d.name}});await refresh();next=new URLSearchParams(location.hash.split('?')[1]||'').get('next')||(s.user.role==='admin'?'admin':s.user.role==='seller'?'seller':'account');notice='Đăng nhập thành công.';}
+        else{await api(d.mode==='register'?'/auth/register':'/auth/login',{method:'POST',body:{email:d.email,password:d.password,name:d.name}});await refresh();next=new URLSearchParams(location.hash.split('?')[1]||'').get('next')||'';notice='Đăng nhập thành công.';}
       }else if(id==='profile'){await api('/me',{method:'PATCH',body:{name:d.name,email:d.email,phone:d.phone}});}
       else if(id==='address'){await api('/addresses'+(d.id?'/'+encodeURIComponent(d.id):''),{method:d.id?'PUT':'POST',body:{name:d.name,phone:d.phone,street:d.street}});next='addresses';}
       else if(id==='password'){if(d.password!==d.confirm)throw Error('Mật khẩu nhập lại chưa khớp.');await api('/auth/password',{method:'POST',body:{currentPassword:d.currentPassword,password:d.password}});next='login';notice='Đã đổi mật khẩu và đăng xuất mọi phiên.';}
@@ -27,7 +27,7 @@ export function installBackendUI({state,refresh,render,go,toast}){
         if(file?.size){if(!['image/png','image/jpeg'].includes(file.type)||file.size>2*1024*1024)throw Error('Chọn PNG/JPEG không quá 2 MB.');body.photo=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('Không thể đọc ảnh.'));r.readAsDataURL(file);});}
         await api('/seller/shops/'+s.shopId+'/products'+(old?'/'+old.id:''),{method:old?'PUT':'POST',body});next='seller/products';notice='Đã lưu sản phẩm và gửi quản trị duyệt.';
       }
-      await refresh();render();if(next)go(next);toast(notice);
+      await refresh();render();if(next!==undefined)go(next);toast(notice);
     },event.submitter);
   },true);
 
