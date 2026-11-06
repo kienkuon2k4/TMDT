@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initialState,addToCart,calculate,placeOrder,cancelOrder,loadState} from '../dist/store.js';
+const day=new Date('2026-11-01T08:00:00Z');
+test('cart enforces stock and merges quantity',()=>{const s=initialState();addToCart(s,'may',2);addToCart(s,'may',1);assert.equal(s.cart[0].qty,3);assert.throws(()=>addToCart(s,'may',22),/Chỉ còn/);assert.equal(s.cart[0].qty,3);assert.throws(()=>addToCart(s,'may',-1),/không hợp lệ/);});
+test('totals apply date, minimum and discount cap',()=>{const s=initialState();addToCart(s,'may');const t=calculate(s,'NEP10',day);assert.equal(t.discount,100000);assert.equal(t.shipping,0);assert.equal(t.total,1790000);assert.equal(calculate(s,'NEP10',new Date('2027-01-01')).discount,0);s.cart=[];addToCart(s,'everyday');assert.equal(calculate(s,'NEP10',day).discount,0);assert.equal(calculate(s,'',day).shipping,30000);});
+test('checkout reduces inventory once and snapshots prices',()=>{const s=initialState();addToCart(s,'may');const order=placeOrder(s,{customer:'Demo',payment:'COD'},'NEP10',day);assert.equal(s.products[0].stock,23);assert.equal(s.cart.length,0);assert.equal(order.total,1790000);s.products[0].price=1000;assert.equal(order.items[0].price,1890000);assert.throws(()=>placeOrder(s,{customer:'Demo'},'',day),/trống/);});
+test('checkout cannot partially mutate inventory on failure',()=>{const s=initialState();addToCart(s,'may');addToCart(s,'moc');s.products[2].stock=0;assert.throws(()=>placeOrder(s,{},'',day),/không đủ/);assert.equal(s.products[0].stock,24);assert.equal(s.orders.length,2);assert.equal(s.cart.length,2);});
+test('cancel restores stock but rejects repeat cancellation',()=>{const s=initialState();addToCart(s,'may');const o=placeOrder(s,{customer:'Demo'},'',day);cancelOrder(s,o.id);assert.equal(s.products[0].stock,24);assert.equal(o.status,'Đã hủy');assert.throws(()=>cancelOrder(s,o.id),/Không thể/);assert.equal(s.products[0].stock,24);});
+test('corrupt saved data falls back to initial state',()=>{assert.equal(loadState({getItem:()=>'{oops'}).products.length,4);});

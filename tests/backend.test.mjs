@@ -1,0 +1,76 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,rmSync} from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {openDatabase} from '../server/database.mjs';
+import {createMarketServer} from '../server/http.mjs';
+import {seed} from './fixtures/seed.mjs';
+
+import {fixture} from './helpers/fixture.mjs';
+test('sessions, password hashing, registration privilege and logout are enforced at server',async t=>{
+  const {db,client}=await fixture(t),c=client();assert.equal((await c.request('/me')).status,401);
+  assert.equal((await c.request('/auth/login','POST',{email:'buyer@nep.local',password:'incorrect'})).status,401);
+  const login=await c.login();assert.match(login.headers.get('set-cookie'),/HttpOnly/);assert.match(login.headers.get('set-cookie'),/SameSite=Strict/);
+  assert.equal(login.data.user.role,'buyer');assert.equal(login.data.user.password_hash,undefined);assert.notEqual(db.prepare("SELECT password_hash FROM users WHERE id='buyer'").get().password_hash,'NepDemo!2026');
+  assert.equal((await c.request('/admin/categories','POST',{name:'Injected'})).status,403);
+  assert.equal((await c.request('/me','PATCH',{name:'Bad',email:'buyer@nep.local',phone:''},{'X-CSRF-Token':'bad'})).status,403);
+  assert.equal((await c.request('/me','PATCH',{name:'Bad',email:'buyer@nep.local',phone:''},{Origin:'https://evil.example'})).status,403);
+  await c.request('/auth/logout','POST',{});assert.equal((await c.request('/me')).status,401);
+  const r=await c.request('/auth/register','POST',{email:'new@example.test',name:'New user',password:'NewPassword2026',role:'admin'});assert.equal(r.status,201);assert.equal(r.data.user.role,'buyer');
+  assert.equal((await c.request('/auth/register','POST',{email:'new@example.test',name:'Duplicate',password:'NewPassword2026'})).status,409);
+});
+test('addresses are isolated by user, validate input and keep one default',async t=>{
+  const {client}=await fixture(t),a=client(),b=client();await a.login();await b.login('seller@nep.local');
+  assert.equal((await b.request('/addresses/a1','PUT',{name:'Stolen',phone:'1',street:'Somewhere'})).status,404);
+  assert.equal((await b.request('/addresses/a1','DELETE',{})).status,404);
+  await a.request('/addresses','POST',{name:'Office',phone:'0900000000',street:'Office address'});let data=(await a.request('/bootstrap')).data;
+  assert.equal(data.addresses.length,2);const id=data.addresses.find(x=>x.id!=='a1').id;
+  await a.request('/addresses/'+id,'PATCH',{default:true});data=(await a.request('/bootstrap')).data;assert.equal(data.addresses.filter(x=>x.default).length,1);assert.equal(data.addresses.find(x=>x.default).id,id);
+  await a.request('/addresses/'+id,'DELETE',{});assert.equal((await a.request('/bootstrap')).data.addresses[0].default,true);
+});
+test('seller scope, SKU prices, moderation and optimistic inventory updates',async t=>{
+  const {db,client}=await fixture(t),seller=client(),admin=client(),guest=client();await seller.login('seller@nep.local');await admin.login('admin@nep.local');
+  assert.equal((await seller.request('/seller/shops/mw/products/oxford','DELETE',{})).status,403);
+  assert.equal((await guest.request('/seller/shops/kt/products/air','DELETE',{})).status,401);
+  const body={name:'API Product',category:'Điện tử',description:'Created through API',attributes:'Warranty',skus:[{label:'Black',code:'API-BLACK',price:120000,stock:3},{label:'White',code:'API-WHITE',price:150000,stock:5}]};
+  const created=await seller.request('/seller/shops/kt/products','POST',body);assert.equal(created.status,201);const id=created.data.id;
+  assert.equal((await guest.request('/bootstrap')).data.products.some(p=>p.id===id),false);
+  assert.equal((await seller.request('/admin/products/'+id,'PATCH',{moderation:'approved'})).status,403);
+  assert.equal((await admin.request('/admin/products/'+id,'PATCH',{moderation:'approved'})).status,200);
+  const p=(await guest.request('/bootstrap')).data.products.find(p=>p.id===id);assert.deepEqual(p.skus.map(x=>x.price),[120000,150000]);
+  assert.equal((await seller.request('/seller/shops/kt/inventory','PUT',{skus:[{id:p.skus[0].id,stock:9,previousStock:3},{id:'oxford-0',stock:1,previousStock:24}]})).status,403);
+  assert.equal(db.prepare('SELECT stock FROM skus WHERE id=?').get(p.skus[0].id).stock,3);
+  assert.equal((await seller.request('/seller/shops/kt/inventory','PUT',{skus:[{id:p.skus[0].id,stock:9,previousStock:3}]})).status,200);
+  assert.equal((await seller.request('/seller/shops/kt/products/'+id,'PUT',{...body,version:p.version,skus:p.skus})).status,409);
+  assert.equal((await seller.request('/seller/shops/kt/inventory','PUT',{skus:[{id:p.skus[0].id,stock:2,previousStock:3}]})).status,409);
+  const old=(await seller.request('/bootstrap')).data.products.find(x=>x.id===id);const edited={...body,version:old.version,skus:old.skus};assert.equal((await seller.request('/seller/shops/kt/products/'+id,'PUT',edited)).status,200);
+  assert.equal((await guest.request('/bootstrap')).data.products.some(p=>p.id===id),false);
+  assert.equal((await seller.request('/seller/shops/kt/products/'+id,'PUT',edited)).status,409);
+  assert.equal((await seller.request('/seller/shops/kt/products','POST',{...body,name:'Invalid',skus:[{label:'Bad',code:'BAD',price:-1,stock:0}]})).status,400);
+  assert.equal((await seller.request('/seller/shops/kt/products','POST',{...body,photo:'data:image/svg+xml;base64,PHN2Zz4='})).status,400);
+  assert.ok(db.prepare("SELECT COUNT(*) n FROM audit WHERE action='inventory_adjust'").get().n>0);
+});
+test('shop registration needs admin approval before granting seller rights',async t=>{
+  const {client}=await fixture(t),buyer=client(),admin=client();await buyer.login();await admin.login('admin@nep.local');
+  const app={name:'New Shop',owner:'Minh Anh',category:'Thời trang',legalName:'Test legal owner',bank:'Test bank only'};
+  const result=await buyer.request('/applications','POST',app);assert.equal(result.status,201);const id=result.data.id;
+  assert.equal((await buyer.request('/seller/shops/'+id,'PATCH',{name:'Bypass'})).status,403);
+  assert.equal((await buyer.request('/admin/applications/'+id,'PATCH',{decision:'approve'})).status,403);
+  assert.equal((await admin.request('/admin/applications/'+id,'PATCH',{decision:'approve'})).status,200);
+  assert.equal((await buyer.request('/me')).data.user.role,'seller');assert.equal((await buyer.request('/seller/shops/'+id,'PATCH',{name:'Approved Shop'})).status,200);
+  assert.equal((await admin.request('/admin/applications/'+id,'PATCH',{decision:'approve'})).status,409);
+});
+test('password reset tokens expire, are single use, and revoke sessions; email is unavailable until configured',async t=>{
+  const {db,client}=await fixture(t),c=client(),other=client();await c.login();
+  assert.equal((await other.request('/auth/forgot','POST',{email:'buyer@nep.local'})).status,503);
+  const {digest}=await import('../server/security.mjs');const raw='b'.repeat(64);db.prepare('INSERT INTO password_resets VALUES(?,?,?,0)').run(digest(raw),'buyer',Date.now()+60000);
+  assert.equal((await other.request('/auth/reset','POST',{token:raw,password:'ChangedPassword2026'})).status,200);
+  assert.equal((await c.request('/me')).status,401);
+  assert.equal((await other.request('/auth/reset','POST',{token:raw,password:'ChangedAgain2026'})).status,400);
+  assert.equal((await other.request('/auth/login','POST',{email:'buyer@nep.local',password:'ChangedPassword2026'})).status,200);
+  const expired='a'.repeat(64);db.prepare('INSERT INTO password_resets VALUES(?,?,?,0)').run(digest(expired),'buyer',Date.now()-1);
+  assert.equal((await other.request('/auth/reset','POST',{token:expired,password:'ChangedAgain2026'})).status,400);
+});
+test('failed login requests are rate limited',async t=>{const {client}=await fixture(t),c=client();for(let i=0;i<10;i++)assert.equal((await c.request('/auth/login','POST',{email:'buyer@nep.local',password:'BadPassword2026'})).status,401);assert.equal((await c.request('/auth/login','POST',{email:'buyer@nep.local',password:'BadPassword2026'})).status,429);});
+test('SQLite records and sessions survive reopening the database',async()=>{const dir=mkdtempSync(path.join(os.tmpdir(),'nep-db-'));const file=path.join(dir,'test.sqlite');try{let db=openDatabase(file);await seed(db);db.prepare("UPDATE users SET name='Persisted name' WHERE id='buyer'").run();db.prepare('INSERT INTO sessions VALUES(?,?,?,?)').run('test-token-hash','buyer','csrf-test',Date.now()+60000);db.close();db=openDatabase(file);assert.equal(db.prepare("SELECT name FROM users WHERE id='buyer'").get().name,'Persisted name');assert.equal(db.prepare('SELECT COUNT(*) n FROM migrations').get().n,2);assert.equal(db.prepare('SELECT user_id FROM sessions WHERE token_hash=?').get('test-token-hash').user_id,'buyer');db.close();}finally{const resolved=path.resolve(dir);assert.equal(path.dirname(resolved),path.resolve(os.tmpdir()));assert.ok(path.basename(resolved).startsWith('nep-db-'));rmSync(resolved,{recursive:true,force:true});}});

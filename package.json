@@ -1,0 +1,17 @@
+{
+  "name": "cho-ptit",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "admin:create": "node scripts/create-admin.mjs",
+    "db:backup": "node scripts/backup.mjs"
+  }
+}

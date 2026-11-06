@@ -1,0 +1,519 @@
+{
+  "fileKey": "OLplY3tysdVlldPDOQEN3u",
+  "sessionId": "47484d4c-1750-4478-a10f-248da0b669ce",
+  "version": "Marketplace V2",
+  "index": "7:237",
+  "home": "28:3242",
+  "screens": [
+    {
+      "key": "home",
+      "id": "28:3242",
+      "title": "Khám phá Nếp Market",
+      "kind": "buyer"
+    },
+    {
+      "key": "catalog",
+      "id": "28:3482",
+      "title": "Tất cả ngành hàng",
+      "kind": "buyer"
+    },
+    {
+      "key": "shops",
+      "id": "28:3745",
+      "title": "Khám phá gian hàng",
+      "kind": "buyer"
+    },
+    {
+      "key": "store",
+      "id": "28:3868",
+      "title": "K-Tech Official",
+      "kind": "buyer"
+    },
+    {
+      "key": "product",
+      "id": "28:4053",
+      "title": "Tai nghe AirTone Pro",
+      "kind": "buyer"
+    },
+    {
+      "key": "cart",
+      "id": "28:4193",
+      "title": "Giỏ hàng · 2 gian hàng",
+      "kind": "buyer"
+    },
+    {
+      "key": "checkout",
+      "id": "28:4337",
+      "title": "Thanh toán nhiều gian hàng",
+      "kind": "buyer"
+    },
+    {
+      "key": "groupOrder",
+      "id": "28:4488",
+      "title": "Đặt hàng thành công · 2 gian hàng",
+      "kind": "buyer"
+    },
+    {
+      "key": "childOrder",
+      "id": "30:4328",
+      "title": "Đơn KT1024 · K-Tech Official",
+      "kind": "buyer"
+    },
+    {
+      "key": "tracking",
+      "id": "30:4451",
+      "title": "Theo dõi vận chuyển KT1024",
+      "kind": "buyer"
+    },
+    {
+      "key": "returnList",
+      "id": "30:4559",
+      "title": "Trả hàng & hoàn tiền của tôi",
+      "kind": "buyer"
+    },
+    {
+      "key": "returnRequest",
+      "id": "30:4665",
+      "title": "Tạo yêu cầu trả hàng / hoàn tiền",
+      "kind": "buyer"
+    },
+    {
+      "key": "returnDetail",
+      "id": "30:4799",
+      "title": "Yêu cầu RT1024",
+      "kind": "buyer"
+    },
+    {
+      "key": "buyerDispute",
+      "id": "30:4907",
+      "title": "Yêu cầu sàn giải quyết",
+      "kind": "buyer"
+    },
+    {
+      "key": "buyerChat",
+      "id": "30:5018",
+      "title": "Tin nhắn với người bán",
+      "kind": "buyer"
+    },
+    {
+      "key": "notifications",
+      "id": "30:5129",
+      "title": "Thông báo",
+      "kind": "buyer"
+    },
+    {
+      "key": "addressesV2",
+      "id": "30:5231",
+      "title": "Sổ địa chỉ",
+      "kind": "buyer"
+    },
+    {
+      "key": "verify",
+      "id": "31:5156",
+      "title": "Xác minh email",
+      "kind": "buyer"
+    },
+    {
+      "key": "resetPassword",
+      "id": "31:5260",
+      "title": "Đặt lại mật khẩu",
+      "kind": "buyer"
+    },
+    {
+      "key": "roleSelect",
+      "id": "31:5366",
+      "title": "Tài khoản của bạn",
+      "kind": "buyer"
+    },
+    {
+      "key": "loginRequired",
+      "id": "31:5475",
+      "title": "Bạn cần đăng nhập",
+      "kind": "buyer"
+    },
+    {
+      "key": "forbidden",
+      "id": "31:5571",
+      "title": "Bạn chưa có quyền truy cập",
+      "kind": "buyer"
+    },
+    {
+      "key": "paymentPending",
+      "id": "31:5674",
+      "title": "Chờ thanh toán MG1024",
+      "kind": "buyer"
+    },
+    {
+      "key": "paymentFailed",
+      "id": "31:5782",
+      "title": "Thanh toán chưa thành công",
+      "kind": "buyer"
+    },
+    {
+      "key": "paymentSuccess",
+      "id": "31:5885",
+      "title": "Thanh toán thành công",
+      "kind": "buyer"
+    },
+    {
+      "key": "networkError",
+      "id": "31:5981",
+      "title": "Không thể tải nội dung",
+      "kind": "buyer"
+    },
+    {
+      "key": "addressDelete",
+      "id": "31:6077",
+      "title": "Xác nhận xóa địa chỉ",
+      "kind": "buyer"
+    },
+    {
+      "key": "openShop",
+      "id": "32:6029",
+      "title": "Bán hàng cùng Nếp Market",
+      "kind": "buyer"
+    },
+    {
+      "key": "shopApplication",
+      "id": "32:6134",
+      "title": "Đăng ký gian hàng · Thông tin cơ bản",
+      "kind": "buyer"
+    },
+    {
+      "key": "sellerVerification",
+      "id": "32:6264",
+      "title": "Xác minh người bán",
+      "kind": "buyer"
+    },
+    {
+      "key": "sellerBank",
+      "id": "32:6383",
+      "title": "Tài khoản nhận thanh toán",
+      "kind": "buyer"
+    },
+    {
+      "key": "shopPending",
+      "id": "32:6504",
+      "title": "Gian hàng đang chờ duyệt",
+      "kind": "buyer"
+    },
+    {
+      "key": "shopRejected",
+      "id": "32:6600",
+      "title": "Hồ sơ cần bổ sung",
+      "kind": "buyer"
+    },
+    {
+      "key": "sellerHome",
+      "id": "33:6607",
+      "title": "Tổng quan gian hàng",
+      "kind": "seller"
+    },
+    {
+      "key": "sellerProducts",
+      "id": "33:6667",
+      "title": "Sản phẩm của K-Tech Official",
+      "kind": "seller"
+    },
+    {
+      "key": "sellerProductEdit",
+      "id": "33:6728",
+      "title": "Thêm / sửa sản phẩm đa ngành",
+      "kind": "seller"
+    },
+    {
+      "key": "inventory",
+      "id": "33:6808",
+      "title": "Kho & biến thể",
+      "kind": "seller"
+    },
+    {
+      "key": "sellerOrders",
+      "id": "33:6871",
+      "title": "Đơn thuộc gian hàng",
+      "kind": "seller"
+    },
+    {
+      "key": "sellerOrder",
+      "id": "33:6914",
+      "title": "Chi tiết KT1024",
+      "kind": "seller"
+    },
+    {
+      "key": "finance",
+      "id": "34:6691",
+      "title": "Tài chính & đối soát",
+      "kind": "seller"
+    },
+    {
+      "key": "payout",
+      "id": "34:6742",
+      "title": "Lịch sử thanh toán cho shop",
+      "kind": "seller"
+    },
+    {
+      "key": "shipping",
+      "id": "34:6779",
+      "title": "Thiết lập vận chuyển",
+      "kind": "seller"
+    },
+    {
+      "key": "sellerReturns",
+      "id": "34:6835",
+      "title": "Yêu cầu trả hàng của shop",
+      "kind": "seller"
+    },
+    {
+      "key": "sellerProfile",
+      "id": "34:6897",
+      "title": "Hồ sơ gian hàng",
+      "kind": "seller"
+    },
+    {
+      "key": "deleteProduct",
+      "id": "34:6951",
+      "title": "Ẩn / xóa sản phẩm",
+      "kind": "seller"
+    },
+    {
+      "key": "inventorySaved",
+      "id": "34:6984",
+      "title": "Đã lưu điều chỉnh tồn kho",
+      "kind": "seller"
+    },
+    {
+      "key": "admin",
+      "id": "35:6781",
+      "title": "Tổng quan sàn",
+      "kind": "admin"
+    },
+    {
+      "key": "approveShop",
+      "id": "35:6842",
+      "title": "Duyệt gian hàng",
+      "kind": "admin"
+    },
+    {
+      "key": "moderation",
+      "id": "35:6898",
+      "title": "Kiểm duyệt sản phẩm",
+      "kind": "admin"
+    },
+    {
+      "key": "categories",
+      "id": "35:6958",
+      "title": "Ngành hàng & thuộc tính",
+      "kind": "admin"
+    },
+    {
+      "key": "users",
+      "id": "35:7018",
+      "title": "Người dùng & phân quyền",
+      "kind": "admin"
+    },
+    {
+      "key": "disputes",
+      "id": "35:7080",
+      "title": "Khiếu nại & tranh chấp",
+      "kind": "admin"
+    },
+    {
+      "key": "settlement",
+      "id": "35:7128",
+      "title": "Đối soát người bán",
+      "kind": "admin"
+    },
+    {
+      "key": "approvalDone",
+      "id": "35:7175",
+      "title": "Đã duyệt gian hàng",
+      "kind": "admin"
+    },
+    {
+      "key": "disputeResolved",
+      "id": "35:7200",
+      "title": "Đã ghi nhận quyết định",
+      "kind": "admin"
+    },
+    {
+      "key": "buyerOrders",
+      "id": "36:6864",
+      "title": "Đơn mua trên sàn",
+      "kind": "buyer"
+    },
+    {
+      "key": "favorites",
+      "id": "36:6986",
+      "title": "Sản phẩm yêu thích",
+      "kind": "buyer"
+    },
+    {
+      "key": "voucherWallet",
+      "id": "36:7154",
+      "title": "Ví voucher",
+      "kind": "buyer"
+    },
+    {
+      "key": "loading",
+      "id": "36:7268",
+      "title": "Đang tải sản phẩm",
+      "kind": "buyer"
+    },
+    {
+      "key": "buyerAddressesEdit",
+      "id": "36:7383",
+      "title": "Thêm / sửa địa chỉ giao hàng",
+      "kind": "buyer"
+    },
+    {
+      "key": "fashionProduct",
+      "id": "39:7542",
+      "title": "Áo sơ mi Oxford",
+      "kind": "buyer"
+    },
+    {
+      "key": "fashionStore",
+      "id": "39:7674",
+      "title": "Mộc Wear",
+      "kind": "buyer"
+    },
+    {
+      "key": "beautyProduct",
+      "id": "39:7789",
+      "title": "Serum dưỡng ẩm 30ml",
+      "kind": "buyer"
+    },
+    {
+      "key": "beautyStore",
+      "id": "39:7911",
+      "title": "Lá Beauty",
+      "kind": "buyer"
+    },
+    {
+      "key": "bookProduct",
+      "id": "41:7949",
+      "title": "Sổ tay Everyday",
+      "kind": "buyer"
+    },
+    {
+      "key": "sportProduct",
+      "id": "41:8073",
+      "title": "Bình giữ nhiệt Active",
+      "kind": "buyer"
+    }
+  ],
+  "targets": {
+    "home": "28:3242",
+    "catalog": "28:3482",
+    "shops": "28:3745",
+    "store": "28:3868",
+    "product": "28:4053",
+    "cart": "28:4193",
+    "checkout": "28:4337",
+    "groupOrder": "28:4488",
+    "childOrder": "30:4328",
+    "tracking": "30:4451",
+    "returnList": "30:4559",
+    "returnRequest": "30:4665",
+    "returnDetail": "30:4799",
+    "buyerDispute": "30:4907",
+    "buyerChat": "30:5018",
+    "notifications": "30:5129",
+    "addressesV2": "30:5231",
+    "verify": "31:5156",
+    "resetPassword": "31:5260",
+    "roleSelect": "31:5366",
+    "loginRequired": "31:5475",
+    "forbidden": "31:5571",
+    "paymentPending": "31:5674",
+    "paymentFailed": "31:5782",
+    "paymentSuccess": "31:5885",
+    "networkError": "31:5981",
+    "addressDelete": "31:6077",
+    "openShop": "32:6029",
+    "shopApplication": "32:6134",
+    "sellerVerification": "32:6264",
+    "sellerBank": "32:6383",
+    "shopPending": "32:6504",
+    "shopRejected": "32:6600",
+    "sellerHome": "33:6607",
+    "sellerProducts": "33:6667",
+    "sellerProductEdit": "33:6728",
+    "inventory": "33:6808",
+    "sellerOrders": "33:6871",
+    "sellerOrder": "33:6914",
+    "finance": "34:6691",
+    "payout": "34:6742",
+    "shipping": "34:6779",
+    "sellerReturns": "34:6835",
+    "sellerProfile": "34:6897",
+    "deleteProduct": "34:6951",
+    "inventorySaved": "34:6984",
+    "admin": "35:6781",
+    "approveShop": "35:6842",
+    "moderation": "35:6898",
+    "categories": "35:6958",
+    "users": "35:7018",
+    "disputes": "35:7080",
+    "settlement": "35:7128",
+    "approvalDone": "35:7175",
+    "disputeResolved": "35:7200",
+    "buyerOrders": "36:6864",
+    "favorites": "36:6986",
+    "voucherWallet": "36:7154",
+    "loading": "36:7268",
+    "buyerAddressesEdit": "36:7383",
+    "fashionProduct": "39:7542",
+    "fashionStore": "39:7674",
+    "beautyProduct": "39:7789",
+    "beautyStore": "39:7911",
+    "bookProduct": "41:7949",
+    "sportProduct": "41:8073",
+    "login": "8:693",
+    "register": "8:752",
+    "forgot": "8:831",
+    "profile": "8:927",
+    "addressEdit": "36:7383",
+    "followed": "28:3868",
+    "index": "7:237"
+  },
+  "categoryProducts": [
+    {
+      "name": "Tai nghe AirTone Pro",
+      "id": "27:3225"
+    },
+    {
+      "name": "Áo sơ mi Oxford",
+      "id": "27:3246"
+    },
+    {
+      "name": "Serum dưỡng ẩm 30ml",
+      "id": "27:3267"
+    },
+    {
+      "name": "Sổ tay Everyday",
+      "id": "27:3289"
+    },
+    {
+      "name": "Bình giữ nhiệt Active",
+      "id": "27:3309"
+    }
+  ],
+  "validation": {
+    "screenCount": 66,
+    "fontFamilies": [
+      "Inter"
+    ],
+    "nodeCount": 5998,
+    "nodeTypes": {
+      "INSTANCE": 433,
+      "FRAME": 1853,
+      "TEXT": 3075,
+      "VECTOR": 354,
+      "RECTANGLE": 251,
+      "SLOT": 32
+    },
+    "overflow": []
+  },
+  "note": "66 new marketplace PC frames, editable vectors/text, multi-seller checkout and per-shop orders, buyer/seller/admin review index and prototype. Earlier single-store frames labeled V1 reference. Website frontend implemented in dist/marketplace.js; see implementation-v2.md for route coverage and demo limitations."
+}
